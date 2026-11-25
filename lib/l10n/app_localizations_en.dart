@@ -228,4 +228,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get summaryOvertimeMonth => 'Overtime This Month: ';
+
+  @override
+  String get germanLaborLaw => 'German Labor Law (ArbZG)';
+
+  @override
+  String get germanLaborLawDescription =>
+      'Enforce statutory breaks (>6h: 30m, >9h: 45m)';
 }

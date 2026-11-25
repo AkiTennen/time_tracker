@@ -623,7 +623,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder: (context) =>
                         AboutMeScreen(onReset: _loadEntriesFromHive),
                   ),
-                );
+                ).then((_) {
+                  _loadData();
+                });
               } else if (value == 'weeklySummary') {
                 if (_userSettings == null) {
                   ScaffoldMessenger.of(context).showSnackBar(

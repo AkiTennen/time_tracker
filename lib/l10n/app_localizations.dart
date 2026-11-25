@@ -535,6 +535,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Overtime This Month: '**
   String get summaryOvertimeMonth;
+
+  /// No description provided for @germanLaborLaw.
+  ///
+  /// In en, this message translates to:
+  /// **'German Labor Law (ArbZG)'**
+  String get germanLaborLaw;
+
+  /// No description provided for @germanLaborLawDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Enforce statutory breaks (>6h: 30m, >9h: 45m)'**
+  String get germanLaborLawDescription;
 }
 
 class _AppLocalizationsDelegate

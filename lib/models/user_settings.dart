@@ -10,6 +10,7 @@ class UserSettings {
   final int regularBreakMinutes;
   final String employerAddress;
   final int lastCarryOverAppliedYear;
+  final bool useGermanLaborLaw;
   int get requiredWeeklyHours => weeklyHours;
   int get carriedOverOvertimeInMinutes => carriedOverOvertime;
   int get carriedOverOvertimeHours => carriedOverOvertime ~/ 60;
@@ -31,6 +32,7 @@ class UserSettings {
     required this.vacationPlanned,
     required this.regularBreakMinutes,
     required this.lastCarryOverAppliedYear,
+    this.useGermanLaborLaw = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -46,6 +48,7 @@ class UserSettings {
       'vacationPlanned': vacationPlanned,
       'regularBreakMinutes': regularBreakMinutes,
       'lastCarryOverAppliedYear': lastCarryOverAppliedYear,
+      'useGermanLaborLaw': useGermanLaborLaw,
     };
   }
 
@@ -62,6 +65,7 @@ class UserSettings {
       vacationPlanned: map['vacationPlanned'] ?? 0,
       regularBreakMinutes: map['regularBreakMinutes'] ?? 0,
       lastCarryOverAppliedYear: map['lastCarryOverAppliedYear'] ?? 0,
+      useGermanLaborLaw: map['useGermanLaborLaw'] ?? false,
     );
   }
   UserSettings copyWith({
@@ -76,6 +80,7 @@ class UserSettings {
     int? regularBreakMinutes,
     String? employerAddress,
     int? lastCarryOverAppliedYear,
+    bool? useGermanLaborLaw,
   }) {
     return UserSettings(
       companyName: companyName ?? this.companyName,
@@ -90,6 +95,7 @@ class UserSettings {
       regularBreakMinutes: regularBreakMinutes ?? this.regularBreakMinutes,
       lastCarryOverAppliedYear:
           lastCarryOverAppliedYear ?? this.lastCarryOverAppliedYear,
+      useGermanLaborLaw: useGermanLaborLaw ?? this.useGermanLaborLaw,
     );
   }
 }

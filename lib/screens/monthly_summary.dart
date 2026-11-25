@@ -21,12 +21,12 @@ class MonthlySummaryScreen extends StatefulWidget {
 
 class _MonthlySummaryScreenState extends State<MonthlySummaryScreen> {
   DateTime? _selectedMonth;
-  late List<TimeEntry> _filteredEntries;
+  List<TimeEntry> _filteredEntries = [];
 
   @override
   void initState() {
     super.initState();
-    _selectedMonth = DateTime.now();
+    _selectedMonth = DateTime(DateTime.now().year, DateTime.now().month);
     _filterEntriesForSelectedMonth();
   }
 
@@ -39,6 +39,18 @@ class _MonthlySummaryScreenState extends State<MonthlySummaryScreen> {
     } else {
       _filteredEntries = [];
     }
+  }
+
+  int _getWorkingDaysInMonth(DateTime month) {
+    int count = 0;
+    final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
+    for (int day = 1; day <= daysInMonth; day++) {
+      final date = DateTime(month.year, month.month, day);
+      if (date.weekday != DateTime.saturday && date.weekday != DateTime.sunday) {
+        count++;
+      }
+    }
+    return count;
   }
 
   @override
@@ -55,8 +67,9 @@ class _MonthlySummaryScreenState extends State<MonthlySummaryScreen> {
 
     final expectedMinutesPerDay =
         (widget.userSettings.requiredWeeklyHours / 5 * 60).round();
-    final expectedHours =
-        (_filteredEntries.length * expectedMinutesPerDay) ~/ 60;
+    final workingDays = _selectedMonth != null ? _getWorkingDaysInMonth(_selectedMonth!) : 20;
+    final expectedTotalMinutes = workingDays * expectedMinutesPerDay;
+    final expectedHours = expectedTotalMinutes ~/ 60;
 
     final actualDuration = calculator.calculateTotalWorkTime();
     final actualHours = actualDuration.inHours;
@@ -78,11 +91,9 @@ class _MonthlySummaryScreenState extends State<MonthlySummaryScreen> {
     final giftedTimeHours = giftedTimeMinutes ~/ 60;
     final giftedTimeRemMin = giftedTimeMinutes % 60;
 
-    final rawMonthlyOvertime =
-        actualDuration -
-        Duration(minutes: _filteredEntries.length * expectedMinutesPerDay);
-    final monthlyOvertimeHours = rawMonthlyOvertime.inHours;
-    final monthlyOvertimeMinutes = rawMonthlyOvertime.inMinutes.remainder(60);
+    final rawMonthlyOvertime = actualDuration.inMinutes - expectedTotalMinutes;
+    final monthlyOvertimeHours = rawMonthlyOvertime ~/ 60;
+    final monthlyOvertimeMinutes = rawMonthlyOvertime.remainder(60);
 
     final totalOvertime = calculator.calculateOvertime();
     final totalOvertimeHours = totalOvertime.inHours;

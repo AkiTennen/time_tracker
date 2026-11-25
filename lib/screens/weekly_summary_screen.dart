@@ -24,10 +24,30 @@ class _WeeklySummaryScreenState extends State<WeeklySummaryScreen> {
   DateTime? _selectedWeekEnd;
   List<TimeEntry> _filteredEntries = [];
 
+  @override
+  void initState() {
+    super.initState();
+    final now = DateTime.now();
+    _selectedWeekStart = now.subtract(Duration(days: now.weekday - 1));
+    _selectedWeekEnd = _selectedWeekStart!.add(const Duration(days: 6));
+    _filterEntries();
+  }
+
+  void _filterEntries() {
+    if (_selectedWeekStart != null && _selectedWeekEnd != null) {
+      _filteredEntries = widget.entries.where((entry) {
+        final date = entry.entryDate;
+        return !date.isBefore(_selectedWeekStart!) && !date.isAfter(_selectedWeekEnd!);
+      }).toList();
+    } else {
+      _filteredEntries = [];
+    }
+  }
+
   void _pickWeek() async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _selectedWeekStart ?? DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
       builder: (context, child) => Theme(data: ThemeData.dark(), child: child!),
@@ -39,10 +59,7 @@ class _WeeklySummaryScreenState extends State<WeeklySummaryScreen> {
       setState(() {
         _selectedWeekStart = weekStart;
         _selectedWeekEnd = weekEnd;
-        _filteredEntries = widget.entries.where((entry) {
-          final date = entry.entryDate;
-          return !date.isBefore(weekStart) && !date.isAfter(weekEnd);
-        }).toList();
+        _filterEntries();
       });
     }
   }
@@ -55,12 +72,7 @@ class _WeeklySummaryScreenState extends State<WeeklySummaryScreen> {
       userSettings: widget.userSettings,
     );
 
-    final expectedMinutes =
-        (_filteredEntries.length /
-                5 *
-                widget.userSettings.requiredWeeklyHours *
-                60)
-            .round();
+    final expectedMinutes = widget.userSettings.requiredWeeklyHours * 60;
     final actualDuration = calculator.calculateTotalWorkTime();
     final giftedMinutes = _filteredEntries
         .where((e) => e.entryType == 'Gifted Time')
@@ -99,7 +111,7 @@ class _WeeklySummaryScreenState extends State<WeeklySummaryScreen> {
               child: Text(loc.summaryWeekLabel),
             ),
             const SizedBox(height: 16),
-            if (_selectedWeekStart != null)
+            if (_selectedWeekStart != null && _selectedWeekEnd != null)
               Text(
                 '${DateFormat.yMMMd().format(_selectedWeekStart!)} – ${DateFormat.yMMMd().format(_selectedWeekEnd!)}',
                 style: const TextStyle(color: Color(0xFFCBA135), fontSize: 16),

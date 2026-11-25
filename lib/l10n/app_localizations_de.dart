@@ -229,4 +229,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get summaryOvertimeMonth => 'Überstunden diesen MOnat: ';
+
+  @override
+  String get germanLaborLaw => 'Deutsches Arbeitszeitgesetz (ArbZG)';
+
+  @override
+  String get germanLaborLawDescription =>
+      'Gesetzliche Pausen erzwingen (>6h: 30m, >9h: 45m)';
 }

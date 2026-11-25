@@ -40,6 +40,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
 
   int vacationTaken = 0;
   int vacationPlanned = 0;
+  bool _useGermanLaborLaw = false;
 
   @override
   void initState() {
@@ -96,6 +97,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
       _regularBreakController.text = _userSettings!.regularBreakMinutes
           .toString();
       _employerAddressController.text = _userSettings!.employerAddress;
+      _useGermanLaborLaw = _userSettings!.useGermanLaborLaw;
 
       _userSettings = _userSettings!.copyWith(
         vacationTaken: vacationTaken,
@@ -122,6 +124,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
       regularBreakMinutes: int.tryParse(_regularBreakController.text) ?? 0,
       employerAddress: _employerAddressController.text,
       lastCarryOverAppliedYear: DateTime.now().year,
+      useGermanLaborLaw: _useGermanLaborLaw,
     );
 
     await UserSettingsService.saveSettings(settings);
@@ -157,6 +160,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
       _vacationPlannedController.clear();
       _regularBreakController.clear();
       _employerAddressController.clear();
+      _useGermanLaborLaw = false;
     });
     if (widget.onReset != null) {
       widget.onReset!(); // Call the callback after reset
@@ -247,7 +251,24 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
                 _regularBreakController,
                 loc.regularBreakDuration,
               ),
-
+              const SizedBox(height: 12),
+              SwitchListTile(
+                title: Text(loc.germanLaborLaw, style: const TextStyle(color: Color(0xFFEFE6D6))),
+                subtitle: Text(loc.germanLaborLawDescription, style: const TextStyle(color: Colors.white70, fontSize: 12)),
+                value: _useGermanLaborLaw,
+                activeThumbColor: const Color(0xFFCBA135),
+                inactiveTrackColor: const Color(0xFF2C1C1A),
+                tileColor: const Color(0xFF2C1C1A),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: Color(0xFFCBA135)),
+                ),
+                onChanged: (val) {
+                  setState(() {
+                    _useGermanLaborLaw = val;
+                  });
+                },
+              ),
               const SizedBox(height: 16),
               Text(
                 "\u{1F334} ${loc.vacationThisYear}",

@@ -30,6 +30,7 @@ A atmospheric, dark-themed time tracking application built with **Flutter**, fea
 
 ### Prerequisites
 - Make sure you have the [Flutter SDK](https://docs.flutter.dev/get-started/install) installed (Dart ^3.8.0).
+- **Java (JDK 17):** Required for Android builds.
 - An active device emulator or connected physical device (Android, iOS, or Desktop).
 
 ### Installation & Setup
