@@ -239,4 +239,25 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get workingDaysPerWeek => 'Arbeitstage pro Woche';
+
+  @override
+  String get exportPdf => 'PDF exportieren';
+
+  @override
+  String get pdfSavedSuccessfully => 'PDF erfolgreich gespeichert unter:';
+
+  @override
+  String get timesheetReport => 'Stundenzettel-Bericht';
+
+  @override
+  String get employee => 'Mitarbeiter';
+
+  @override
+  String get period => 'Zeitraum';
+
+  @override
+  String get signatureEmployee => 'Unterschrift & Datum (Mitarbeiter)';
+
+  @override
+  String get signatureManager => 'Unterschrift & Datum (Vorgesetzter)';
 }

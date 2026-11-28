@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../models/time_entry.dart';
 import '../models/user_settings.dart';
 import '../services/time_calculator.dart';
+import '../services/pdf_report_service.dart';
 import '../l10n/app_localizations.dart';
 
 class WeeklySummaryScreen extends StatefulWidget {
@@ -96,6 +97,31 @@ class _WeeklySummaryScreenState extends State<WeeklySummaryScreen> {
         backgroundColor: const Color(0xFF2C1C1A),
         foregroundColor: const Color(0xFFCBA135),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.picture_as_pdf),
+            tooltip: loc.exportPdf,
+            onPressed: () async {
+              if (_selectedWeekStart == null || _selectedWeekEnd == null) return;
+              try {
+                final path = await PdfReportService.generateWeeklyPdf(
+                  weekStart: _selectedWeekStart!,
+                  weekEnd: _selectedWeekEnd!,
+                  entries: _filteredEntries,
+                  userSettings: widget.userSettings,
+                  loc: loc,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("${loc.pdfSavedSuccessfully}\n$path")),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Error generating PDF: $e")),
+                );
+              }
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

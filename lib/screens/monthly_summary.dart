@@ -4,6 +4,7 @@ import '../l10n/app_localizations.dart';
 import '../models/time_entry.dart';
 import '../models/user_settings.dart';
 import '../services/time_calculator.dart';
+import '../services/pdf_report_service.dart';
 
 class MonthlySummaryScreen extends StatefulWidget {
   final List<TimeEntry> entries;
@@ -106,6 +107,30 @@ class _MonthlySummaryScreenState extends State<MonthlySummaryScreen> {
         backgroundColor: const Color(0xFF2C1C1A),
         foregroundColor: const Color(0xFFCBA135),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.picture_as_pdf),
+            tooltip: loc.exportPdf,
+            onPressed: () async {
+              if (_selectedMonth == null) return;
+              try {
+                final path = await PdfReportService.generateMonthlyPdf(
+                  month: _selectedMonth!,
+                  entries: _filteredEntries,
+                  userSettings: widget.userSettings,
+                  loc: loc,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("${loc.pdfSavedSuccessfully}\n$path")),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Error generating PDF: $e")),
+                );
+              }
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

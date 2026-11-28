@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_settings.dart';
 import '../services/user_settings_service.dart';
 import '../services/time_calculator.dart';
+import '../services/pdf_report_service.dart';
 import '../l10n/app_localizations.dart';
 import '../screens/weekly_summary_screen.dart';
 import '../screens/monthly_summary.dart';
@@ -615,7 +616,7 @@ class _HomeScreenState extends State<HomeScreen> {
           PopupMenuButton<String>(
             icon: const Icon(Icons.settings),
             tooltip: loc.aboutMeTitle,
-            onSelected: (value) {
+            onSelected: (value) async {
               if (value == 'about') {
                 Navigator.push(
                   context,
@@ -660,6 +661,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 );
+              } else if (value == 'dailyPdf') {
+                if (_userSettings == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Settings not loaded yet.")),
+                  );
+                  return;
+                }
+
+                try {
+                  final path = await PdfReportService.generateDailyPdf(
+                    date: selected,
+                    entries: selectedEntries,
+                    userSettings: _userSettings!,
+                    loc: loc,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("${loc.pdfSavedSuccessfully}\n$path")),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Error generating PDF: $e")),
+                  );
+                }
               }
             },
             itemBuilder: (BuildContext context) => [
@@ -668,11 +692,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 value: 'weeklySummary',
                 child: Text(
                   loc.summaryWeekLabel,
-                ), // ← Add this to your ARB files!
+                ),
               ),
               PopupMenuItem(
                 value: 'monthlySummary',
                 child: Text(loc.summaryMonthLabel),
+              ),
+              PopupMenuItem(
+                value: 'dailyPdf',
+                child: Text("${loc.exportPdf} (Daily)"),
               ),
             ],
           ),

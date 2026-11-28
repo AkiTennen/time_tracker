@@ -553,6 +553,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Working Days per Week'**
   String get workingDaysPerWeek;
+
+  /// No description provided for @exportPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Export PDF'**
+  String get exportPdf;
+
+  /// No description provided for @pdfSavedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF saved successfully to:'**
+  String get pdfSavedSuccessfully;
+
+  /// No description provided for @timesheetReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Timesheet Report'**
+  String get timesheetReport;
+
+  /// No description provided for @employee.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee'**
+  String get employee;
+
+  /// No description provided for @period.
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get period;
+
+  /// No description provided for @signatureEmployee.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Signature & Date'**
+  String get signatureEmployee;
+
+  /// No description provided for @signatureManager.
+  ///
+  /// In en, this message translates to:
+  /// **'Manager Signature & Date'**
+  String get signatureManager;
 }
 
 class _AppLocalizationsDelegate
