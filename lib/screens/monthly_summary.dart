@@ -33,9 +33,16 @@ class _MonthlySummaryScreenState extends State<MonthlySummaryScreen> {
 
   void _filterEntriesForSelectedMonth() {
     if (_selectedMonth != null) {
+      final startDate = widget.userSettings.employmentStartDate;
       _filteredEntries = widget.entries.where((entry) {
-        return entry.entryDate.year == _selectedMonth!.year &&
-            entry.entryDate.month == _selectedMonth!.month;
+        if (entry.entryDate.year != _selectedMonth!.year ||
+            entry.entryDate.month != _selectedMonth!.month) {
+          return false;
+        }
+        if (startDate != null && entry.entryDate.isBefore(DateTime(startDate.year, startDate.month, startDate.day))) {
+          return false;
+        }
+        return true;
       }).toList();
     } else {
       _filteredEntries = [];
@@ -45,8 +52,18 @@ class _MonthlySummaryScreenState extends State<MonthlySummaryScreen> {
   int _getWorkingDaysInMonth(DateTime month) {
     int weekdayCount = 0;
     final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
+    final startDate = widget.userSettings.employmentStartDate;
+
     for (int day = 1; day <= daysInMonth; day++) {
       final date = DateTime(month.year, month.month, day);
+
+      if (startDate != null && date.isBefore(DateTime(startDate.year, startDate.month, startDate.day))) {
+        continue;
+      }
+      if (date.isAfter(DateTime.now())) {
+        continue;
+      }
+
       if (date.weekday != DateTime.saturday && date.weekday != DateTime.sunday) {
         weekdayCount++;
       }

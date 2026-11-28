@@ -12,6 +12,7 @@ class UserSettings {
   final int lastCarryOverAppliedYear;
   final bool useGermanLaborLaw;
   final int workingDaysPerWeek;
+  final DateTime? employmentStartDate;
 
   int get requiredWeeklyHours => weeklyHours;
   int get carriedOverOvertimeInMinutes => carriedOverOvertime;
@@ -36,6 +37,7 @@ class UserSettings {
     required this.lastCarryOverAppliedYear,
     this.useGermanLaborLaw = false,
     this.workingDaysPerWeek = 5,
+    this.employmentStartDate,
   });
 
   Map<String, dynamic> toMap() {
@@ -53,6 +55,7 @@ class UserSettings {
       'lastCarryOverAppliedYear': lastCarryOverAppliedYear,
       'useGermanLaborLaw': useGermanLaborLaw,
       'workingDaysPerWeek': workingDaysPerWeek,
+      'employmentStartDate': employmentStartDate?.toIso8601String(),
     };
   }
 
@@ -71,6 +74,9 @@ class UserSettings {
       lastCarryOverAppliedYear: map['lastCarryOverAppliedYear'] ?? 0,
       useGermanLaborLaw: map['useGermanLaborLaw'] ?? false,
       workingDaysPerWeek: map['workingDaysPerWeek'] ?? 5,
+      employmentStartDate: map['employmentStartDate'] != null
+          ? DateTime.parse(map['employmentStartDate'])
+          : null,
     );
   }
 
@@ -88,6 +94,7 @@ class UserSettings {
     int? lastCarryOverAppliedYear,
     bool? useGermanLaborLaw,
     int? workingDaysPerWeek,
+    DateTime? employmentStartDate,
   }) {
     return UserSettings(
       companyName: companyName ?? this.companyName,
@@ -104,6 +111,7 @@ class UserSettings {
           lastCarryOverAppliedYear ?? this.lastCarryOverAppliedYear,
       useGermanLaborLaw: useGermanLaborLaw ?? this.useGermanLaborLaw,
       workingDaysPerWeek: workingDaysPerWeek ?? this.workingDaysPerWeek,
+      employmentStartDate: employmentStartDate ?? this.employmentStartDate,
     );
   }
 }

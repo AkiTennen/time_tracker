@@ -107,5 +107,6 @@
   "employee": "Employee",
   "period": "Period",
   "signatureEmployee": "Employee Signature & Date",
-  "signatureManager": "Manager Signature & Date"
+  "signatureManager": "Manager Signature & Date",
+  "employmentStartDate": "Employment Start Date"
 }

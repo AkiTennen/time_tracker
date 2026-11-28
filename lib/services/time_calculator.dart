@@ -33,9 +33,27 @@ class TimeCalculator {
     return grouped;
   }
 
+  List<TimeEntry> _getValidEntries() {
+    final startDate = userSettings.employmentStartDate != null
+        ? DateTime(
+            userSettings.employmentStartDate!.year,
+            userSettings.employmentStartDate!.month,
+            userSettings.employmentStartDate!.day,
+          )
+        : null;
+
+    return entries.where((entry) {
+      if (startDate != null && entry.entryDate.isBefore(startDate)) {
+        return false;
+      }
+      return true;
+    }).toList();
+  }
+
   Duration calculateTotalWorkTime() {
     Duration total = Duration.zero;
-    final groupedEntries = _groupEntriesByDay(entries);
+    final validEntries = _getValidEntries();
+    final groupedEntries = _groupEntriesByDay(validEntries);
 
     for (final dayEntries in groupedEntries.values) {
       final regularEntries = dayEntries
@@ -99,7 +117,33 @@ class TimeCalculator {
     int totalExpectedMinutes = 0;
     int overtimeTakenMinutes = 0;
 
-    final groupedEntries = _groupEntriesByDay(entries);
+    final startDate = userSettings.employmentStartDate != null
+        ? DateTime(
+            userSettings.employmentStartDate!.year,
+            userSettings.employmentStartDate!.month,
+            userSettings.employmentStartDate!.day,
+          )
+        : (entries.isNotEmpty
+            ? entries.map((e) => e.entryDate).reduce((a, b) => a.isBefore(b) ? a : b)
+            : DateTime(DateTime.now().year, 1, 1));
+
+    final endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+    // 1. Calculate total expected minutes across all working days from start date up to today
+    if (!startDate.isAfter(endDate)) {
+      DateTime current = startDate;
+      while (!current.isAfter(endDate)) {
+        final isWeekday = current.weekday != DateTime.saturday && current.weekday != DateTime.sunday;
+        if (isWeekday) {
+          totalExpectedMinutes += expectedMinutesPerDay;
+        }
+        current = current.add(const Duration(days: 1));
+      }
+    }
+
+    // 2. Calculate actual worked minutes and adjustments from valid entries
+    final validEntries = _getValidEntries();
+    final groupedEntries = _groupEntriesByDay(validEntries);
 
     for (final entryGroup in groupedEntries.entries) {
       final date = entryGroup.key;
@@ -139,7 +183,6 @@ class TimeCalculator {
         final breakToApply = max(totalActualBreak, requiredBreak);
 
         totalWorkedMinutes += max(0, grossWorkedMinutes - breakToApply);
-        totalExpectedMinutes += expectedMinutesPerDay;
       }
 
       for (final entry in dayEntries) {
@@ -149,7 +192,6 @@ class TimeCalculator {
           case 'Public Holiday':
             if (isPastOrToday) {
               totalWorkedMinutes += expectedMinutesPerDay;
-              totalExpectedMinutes += expectedMinutesPerDay;
             }
             break;
           case 'Gifted Time':

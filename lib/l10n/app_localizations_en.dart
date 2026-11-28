@@ -259,4 +259,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signatureManager => 'Manager Signature & Date';
+
+  @override
+  String get employmentStartDate => 'Employment Start Date';
 }

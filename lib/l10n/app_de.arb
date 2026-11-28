@@ -107,5 +107,6 @@
   "employee": "Mitarbeiter",
   "period": "Zeitraum",
   "signatureEmployee": "Unterschrift & Datum (Mitarbeiter)",
-  "signatureManager": "Unterschrift & Datum (Vorgesetzter)"
+  "signatureManager": "Unterschrift & Datum (Vorgesetzter)",
+  "employmentStartDate": "Beschäftigungsbeginn"
 }

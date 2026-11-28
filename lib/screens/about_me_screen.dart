@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hive/hive.dart';
 import '../models/time_entry.dart';
@@ -42,6 +43,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
   int vacationTaken = 0;
   int vacationPlanned = 0;
   bool _useGermanLaborLaw = false;
+  DateTime? _employmentStartDate;
 
   @override
   void initState() {
@@ -71,6 +73,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
       _regularBreakController.text = '0';
       _employerAddressController.text = '';
       _workingDaysController.text = '5';
+      _employmentStartDate = null;
     } else {
       final allEntries = Hive.box<TimeEntry>('time_entries').values;
       final now = DateTime.now();
@@ -101,6 +104,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
       _employerAddressController.text = _userSettings!.employerAddress;
       _useGermanLaborLaw = _userSettings!.useGermanLaborLaw;
       _workingDaysController.text = _userSettings!.workingDaysPerWeek.toString();
+      _employmentStartDate = _userSettings!.employmentStartDate;
 
       _userSettings = _userSettings!.copyWith(
         vacationTaken: vacationTaken,
@@ -129,6 +133,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
       lastCarryOverAppliedYear: DateTime.now().year,
       useGermanLaborLaw: _useGermanLaborLaw,
       workingDaysPerWeek: int.tryParse(_workingDaysController.text) ?? 5,
+      employmentStartDate: _employmentStartDate,
     );
 
     await UserSettingsService.saveSettings(settings);
@@ -166,6 +171,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
       _employerAddressController.clear();
       _workingDaysController.text = '5';
       _useGermanLaborLaw = false;
+      _employmentStartDate = null;
     });
     if (widget.onReset != null) {
       widget.onReset!(); // Call the callback after reset
@@ -260,6 +266,35 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
                 _workingDaysController,
                 loc.workingDaysPerWeek,
               ),
+              const SizedBox(height: 12),
+              ListTile(
+                title: Text(loc.employmentStartDate, style: const TextStyle(color: Color(0xFFCBA135))),
+                subtitle: Text(
+                  _employmentStartDate != null ? DateFormat.yMMMd().format(_employmentStartDate!) : loc.notSet,
+                  style: const TextStyle(color: Color(0xFFEFE6D6)),
+                ),
+                trailing: const Icon(Icons.calendar_today, color: Color(0xFFCBA135)),
+                tileColor: const Color(0xFF2C1C1A),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: Color(0xFFCBA135)),
+                ),
+                onTap: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: _employmentStartDate ?? DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                    builder: (context, child) => Theme(data: ThemeData.dark(), child: child!),
+                  );
+                  if (picked != null) {
+                    setState(() {
+                      _employmentStartDate = picked;
+                    });
+                  }
+                },
+              ),
+              const SizedBox(height: 12),
               const SizedBox(height: 12),
               SwitchListTile(
                 title: Text(loc.germanLaborLaw, style: const TextStyle(color: Color(0xFFEFE6D6))),

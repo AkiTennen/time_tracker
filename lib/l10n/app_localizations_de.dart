@@ -260,4 +260,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get signatureManager => 'Unterschrift & Datum (Vorgesetzter)';
+
+  @override
+  String get employmentStartDate => 'Beschäftigungsbeginn';
 }

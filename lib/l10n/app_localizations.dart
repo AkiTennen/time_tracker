@@ -595,6 +595,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Manager Signature & Date'**
   String get signatureManager;
+
+  /// No description provided for @employmentStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Employment Start Date'**
+  String get employmentStartDate;
 }
 
 class _AppLocalizationsDelegate
