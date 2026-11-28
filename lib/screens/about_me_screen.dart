@@ -37,6 +37,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
       TextEditingController();
   final TextEditingController _overtimeMinutesController =
       TextEditingController();
+  final TextEditingController _workingDaysController = TextEditingController();
 
   int vacationTaken = 0;
   int vacationPlanned = 0;
@@ -69,6 +70,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
       _vacationPlannedController.text = '0';
       _regularBreakController.text = '0';
       _employerAddressController.text = '';
+      _workingDaysController.text = '5';
     } else {
       final allEntries = Hive.box<TimeEntry>('time_entries').values;
       final now = DateTime.now();
@@ -98,6 +100,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
           .toString();
       _employerAddressController.text = _userSettings!.employerAddress;
       _useGermanLaborLaw = _userSettings!.useGermanLaborLaw;
+      _workingDaysController.text = _userSettings!.workingDaysPerWeek.toString();
 
       _userSettings = _userSettings!.copyWith(
         vacationTaken: vacationTaken,
@@ -125,6 +128,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
       employerAddress: _employerAddressController.text,
       lastCarryOverAppliedYear: DateTime.now().year,
       useGermanLaborLaw: _useGermanLaborLaw,
+      workingDaysPerWeek: int.tryParse(_workingDaysController.text) ?? 5,
     );
 
     await UserSettingsService.saveSettings(settings);
@@ -160,6 +164,7 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
       _vacationPlannedController.clear();
       _regularBreakController.clear();
       _employerAddressController.clear();
+      _workingDaysController.text = '5';
       _useGermanLaborLaw = false;
     });
     if (widget.onReset != null) {
@@ -250,6 +255,10 @@ class _AboutMeScreenState extends State<AboutMeScreen> {
               _buildNumberField(
                 _regularBreakController,
                 loc.regularBreakDuration,
+              ),
+              _buildNumberField(
+                _workingDaysController,
+                loc.workingDaysPerWeek,
               ),
               const SizedBox(height: 12),
               SwitchListTile(

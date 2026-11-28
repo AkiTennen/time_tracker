@@ -236,4 +236,7 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get germanLaborLawDescription =>
       'Gesetzliche Pausen erzwingen (>6h: 30m, >9h: 45m)';
+
+  @override
+  String get workingDaysPerWeek => 'Arbeitstage pro Woche';
 }

@@ -99,5 +99,6 @@
   "summaryMonthLabel": "Übersicht für diesen Monat",
   "summaryOvertimeMonth": "Überstunden diesen MOnat: ",
   "germanLaborLaw": "Deutsches Arbeitszeitgesetz (ArbZG)",
-  "germanLaborLawDescription": "Gesetzliche Pausen erzwingen (>6h: 30m, >9h: 45m)"
+  "germanLaborLawDescription": "Gesetzliche Pausen erzwingen (>6h: 30m, >9h: 45m)",
+  "workingDaysPerWeek": "Arbeitstage pro Woche"
 }

@@ -235,4 +235,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get germanLaborLawDescription =>
       'Enforce statutory breaks (>6h: 30m, >9h: 45m)';
+
+  @override
+  String get workingDaysPerWeek => 'Working Days per Week';
 }

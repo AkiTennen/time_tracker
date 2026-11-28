@@ -547,6 +547,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enforce statutory breaks (>6h: 30m, >9h: 45m)'**
   String get germanLaborLawDescription;
+
+  /// No description provided for @workingDaysPerWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Working Days per Week'**
+  String get workingDaysPerWeek;
 }
 
 class _AppLocalizationsDelegate

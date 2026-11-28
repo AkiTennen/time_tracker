@@ -99,5 +99,6 @@
   "summaryMonthLabel": "Summary for this month",
   "summaryOvertimeMonth": "Overtime This Month: ",
   "germanLaborLaw": "German Labor Law (ArbZG)",
-  "germanLaborLawDescription": "Enforce statutory breaks (>6h: 30m, >9h: 45m)"
+  "germanLaborLawDescription": "Enforce statutory breaks (>6h: 30m, >9h: 45m)",
+  "workingDaysPerWeek": "Working Days per Week"
 }

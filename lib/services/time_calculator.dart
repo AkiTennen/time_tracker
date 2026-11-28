@@ -84,7 +84,7 @@ class TimeCalculator {
               'Public Holiday',
             ].contains(entry.entryType) &&
             !entry.entryDate.isAfter(DateTime.now())) {
-          final dailyMinutes = (userSettings.requiredWeeklyHours / 5 * 60).round();
+          final dailyMinutes = (userSettings.requiredWeeklyHours / userSettings.workingDaysPerWeek * 60).round();
           total += Duration(minutes: dailyMinutes);
         }
       }
@@ -94,7 +94,7 @@ class TimeCalculator {
   }
 
   Duration calculateOvertime() {
-    final expectedMinutesPerDay = (userSettings.requiredWeeklyHours / 5 * 60).round();
+    final expectedMinutesPerDay = (userSettings.requiredWeeklyHours / userSettings.workingDaysPerWeek * 60).round();
     int totalWorkedMinutes = 0;
     int totalExpectedMinutes = 0;
     int overtimeTakenMinutes = 0;

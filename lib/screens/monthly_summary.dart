@@ -42,15 +42,15 @@ class _MonthlySummaryScreenState extends State<MonthlySummaryScreen> {
   }
 
   int _getWorkingDaysInMonth(DateTime month) {
-    int count = 0;
+    int weekdayCount = 0;
     final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
     for (int day = 1; day <= daysInMonth; day++) {
       final date = DateTime(month.year, month.month, day);
       if (date.weekday != DateTime.saturday && date.weekday != DateTime.sunday) {
-        count++;
+        weekdayCount++;
       }
     }
-    return count;
+    return ((weekdayCount * widget.userSettings.workingDaysPerWeek) / 5).round();
   }
 
   @override
@@ -66,7 +66,7 @@ class _MonthlySummaryScreenState extends State<MonthlySummaryScreen> {
     );
 
     final expectedMinutesPerDay =
-        (widget.userSettings.requiredWeeklyHours / 5 * 60).round();
+        (widget.userSettings.requiredWeeklyHours / widget.userSettings.workingDaysPerWeek * 60).round();
     final workingDays = _selectedMonth != null ? _getWorkingDaysInMonth(_selectedMonth!) : 20;
     final expectedTotalMinutes = workingDays * expectedMinutesPerDay;
     final expectedHours = expectedTotalMinutes ~/ 60;

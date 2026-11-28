@@ -12,7 +12,7 @@ void main() {
         companyName: 'Gothic Corp',
         userName: 'Gothic Worker',
         employerAddress: 'Dark Alley 1',
-        weeklyHours: 40,
+        weeklyHours: 40, // 8 hours per day (480 mins)
         carriedOverOvertime: 0,
         vacationCarried: 0,
         vacationThisYear: 30,
@@ -128,6 +128,50 @@ void main() {
 
       // 600 mins gross - 45 mins statutory break (ArbZG § 4) = 555 mins
       expect(totalWork.inMinutes, equals(555));
+    });
+
+    test('Special Entry Types (Sick Day, Vacation, Gifted Time, Overtime Taken) calculations', () {
+      final pastDate = DateTime.now().subtract(const Duration(days: 1));
+
+      final sickEntry = TimeEntry(
+        punchIn: pastDate,
+        entryDate: pastDate,
+        entryType: 'Sick Day',
+      );
+
+      final giftedEntry = TimeEntry(
+        punchIn: pastDate,
+        entryDate: pastDate,
+        entryType: 'Gifted Time',
+        manualWorkDurationInMinutes: 120, // 2 hours gifted
+      );
+
+      final overtimeTakenEntry = TimeEntry(
+        punchIn: pastDate,
+        entryDate: pastDate,
+        entryType: 'Overtime Taken',
+        manualWorkDurationInMinutes: 60, // 1 hour taken off
+      );
+
+      final calculator = TimeCalculator(
+        entries: [sickEntry, giftedEntry, overtimeTakenEntry],
+        userSettings: defaultSettings,
+      );
+
+      // Sick Day adds 480 mins (8 hours)
+      // Gifted Time adds 120 mins
+      // Overtime Taken subtracts 60 mins
+      // Total work time = 480 + 120 - 60 = 540 mins.
+      final totalWork = calculator.calculateTotalWorkTime();
+      expect(totalWork.inMinutes, equals(540));
+
+      // Overtime calculation:
+      // Worked = 480 (sick) + 120 (gifted) = 600 mins.
+      // Expected = 1 day * 480 = 480 mins.
+      // Overtime taken = 60 mins.
+      // Final overtime = (600 - 480) - 60 = 120 - 60 = 60 mins.
+      final overtime = calculator.calculateOvertime();
+      expect(overtime.inMinutes, equals(60));
     });
   });
 }
